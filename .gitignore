@@ -1,4 +1,14 @@
-__pycache__/
 .env
-venv/
+
+usr/
+tmp/
+mingw64/
+
+*.exe
+*.dat
+*.msg
+
+**pycache**/
 *.pyc
+
+.vscode/
