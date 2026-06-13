@@ -7,15 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vibrantic AI</title>
 
-```
+
 <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-```
+
 
 </head>
 
 <body>
+    
+<div id="spotlight"></div>
 
 <div class="overlay"></div>
 
@@ -29,17 +31,21 @@
 
 <div class="app">
 
-```
 <!-- SIDEBAR -->
 
 <aside class="sidebar">
+    <button id="sidebarToggle" class="sidebar-toggle">
+☰
+    </button>
+
 
     <div class="logo">
         <h2>Vibrantic AI</h2>
         <p>Think. Create. Elevate.</p>
     </div>
 
-    <button class="new-chat magnetic">
+    <button id="newchatBtn"
+    class="new-chat magnetic">
         + New Chat
     </button>
 
@@ -50,6 +56,12 @@
         <a href="#">Tools</a>
         <a href="#">History</a>
         <a href="#">Settings</a>
+        <h3 class="history-title">
+    Recent Chats
+</h3>
+
+<div id="historyList" class="history-list">
+</div>
     </nav>
 
     <div class="sidebar-footer">
@@ -128,11 +140,11 @@
 
         <!-- SUGGESTIONS -->
 
-        <h3 class="section-title">
-            Suggested Prompts
-        </h3>
+       <h3 id="promptTitle" class="section-title">
+        Suggested Prompts
+       </h3>
 
-        <div class="suggestions">
+        <div id="promptTitle" class="suggestions">
 
             <div class="card">
                 Create a business plan
@@ -162,11 +174,11 @@
 
         <!-- TOOLS -->
 
-        <h3 class="section-title">
+        <h3 id="toolTitles" class="section-title">
             Popular Tools
         </h3>
 
-        <div class="tools">
+        <div id="tool" class="tools">
 
             <div class="tool">
                 <h4>✍ Writer</h4>

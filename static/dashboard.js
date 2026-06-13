@@ -13,6 +13,8 @@ document.getElementById("sendButton");
 const chatContainer =
 document.getElementById("chatContainer");
 
+let chatHistory = [];
+
 /* =========================
 AUTO EXPAND TEXTAREA
 ========================= */
@@ -81,6 +83,8 @@ function addUserMessage(text){
 const message =
 document.createElement("div");
 
+let firstMessage = true;
+
 message.className =
 "user-message";
 
@@ -100,7 +104,7 @@ chatContainer.scrollHeight;
 ADD AI MESSAGE
 ========================= */
 
-function addAIMessage(text){
+async function addAIMessage(text){
 
 const message =
 document.createElement("div");
@@ -108,15 +112,32 @@ document.createElement("div");
 message.className =
 "ai-message";
 
-message.textContent =
-text;
-
 chatContainer.appendChild(
 message
 );
 
+const words =
+text.split(" ");
+
+for(const word of words){
+
+message.textContent +=
+word + " ";
+
 chatContainer.scrollTop =
 chatContainer.scrollHeight;
+
+await new Promise(
+resolve =>
+setTimeout(resolve,35)
+);
+
+await addAIMessage(
+data.response ||
+"No response received."
+);
+
+}
 
 }
 
@@ -135,8 +156,13 @@ typing.className =
 typing.id =
 "typing";
 
-typing.innerHTML =
-"Thinking...";
+typing.innerHTML = `
+<div class="typing-indicator">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+`;
 
 chatContainer.appendChild(
 typing
@@ -144,7 +170,6 @@ typing
 
 chatContainer.scrollTop =
 chatContainer.scrollHeight;
-
 }
 
 function removeTyping(){
@@ -174,6 +199,40 @@ input.value.trim();
 if(!message) return;
 
 addUserMessage(message);
+if(firstMessage){
+
+chatHistory.unshift(message);
+
+saveHistory();
+
+renderHistory();
+
+}
+if(firstMessage){
+
+document
+.getElementById("welcomeText")
+.classList.add("hide-section");
+
+document
+.getElementById("promptTitle")
+.classList.add("hide-section");
+
+document
+.getElementById("suggestions")
+.classList.add("hide-section");
+
+document
+.getElementById("toolTitle")
+.classList.add("hide-section");
+
+document
+.getElementById("tools")
+.classList.add("hide-section");
+
+firstMessage = false;
+
+}
 
 input.value = "";
 
@@ -328,3 +387,150 @@ input.focus();
 });
 
 });
+
+/* =========================
+   SIDEBAR COLLAPSE
+========================= */
+
+const sidebar =
+document.querySelector(".sidebar");
+
+const sidebarToggle =
+document.getElementById("sidebarToggle");
+
+sidebarToggle.addEventListener(
+"click",
+()=>{
+
+sidebar.classList.toggle(
+"collapsed"
+);
+
+});
+
+
+/* =========================
+   CURSOR SPOTLIGHT
+========================= */
+
+const spotlight =
+document.getElementById(
+"spotlight"
+);
+
+document.addEventListener(
+"mousemove",
+(e)=>{
+
+spotlight.style.left =
+e.clientX + "px";
+
+spotlight.style.top =
+e.clientY + "px";
+
+});
+
+/* =========================
+   NEW CHAT
+========================= */
+
+function resetChat(){
+
+chatContainer.innerHTML = "";
+
+document
+.getElementById("welcomeText")
+.classList.remove("hide-section");
+
+document
+.getElementById("promptTitle")
+.classList.remove("hide-section");
+
+document
+.getElementById("suggestions")
+.classList.remove("hide-section");
+
+document
+.getElementById("toolTitle")
+.classList.remove("hide-section");
+
+document
+.getElementById("tools")
+.classList.remove("hide-section");
+
+firstMessage = true;
+
+input.value = "";
+
+input.focus();
+
+}
+
+const newChatBtn =
+document.getElementById(
+"newChatBtn"
+);
+
+newChatBtn.addEventListener(
+"click",
+resetChat
+);
+
+/* =========================
+   CHAT HISTORY
+========================= */
+
+function saveHistory(){
+
+localStorage.setItem(
+"vibrantic_history",
+JSON.stringify(chatHistory)
+);
+
+}
+
+function loadHistory(){
+
+const saved =
+localStorage.getItem(
+"vibrantic_history"
+);
+
+if(saved){
+
+chatHistory =
+JSON.parse(saved);
+
+renderHistory();
+
+}
+
+}
+
+function renderHistory(){
+
+const list =
+document.getElementById(
+"historyList"
+);
+
+list.innerHTML = "";
+
+chatHistory.forEach(chat=>{
+
+const item =
+document.createElement("div");
+
+item.className =
+"history-item";
+
+item.textContent =
+chat;
+
+list.appendChild(item);
+
+});
+
+}
+
+loadHistory();
