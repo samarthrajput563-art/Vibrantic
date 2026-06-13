@@ -1,50 +1,330 @@
 console.log("Vibrantic AI Loaded");
 
-const input = document.getElementById("userInput");
-const sendButton = document.getElementById("sendButton");
+/* =========================
+ELEMENTS
+========================= */
 
-sendButton.addEventListener("click", async () => {
+const input =
+document.getElementById("userInput");
 
-    const message = input.value.trim();
+const sendButton =
+document.getElementById("sendButton");
 
-    if (!message) return;
+const chatContainer =
+document.getElementById("chatContainer");
 
-    try {
+/* =========================
+AUTO EXPAND TEXTAREA
+========================= */
 
-        const response = await fetch("/chat", {
+function autoResize(){
 
-            method: "POST",
+input.style.height = "auto";
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+input.style.height =
+input.scrollHeight + "px";
 
-            body: JSON.stringify({
-                message: message
-            })
+}
 
-        });
+input.addEventListener(
+"input",
+autoResize
+);
 
-        const data = await response.json();
+/* =========================
+MAGNETIC BUTTONS
+========================= */
 
-        console.log(data.response);
+document
+.querySelectorAll(".magnetic")
+.forEach(button=>{
 
-    } catch (error) {
+button.addEventListener(
+"mousemove",
+(e)=>{
 
-        console.error(error);
+const rect =
+button.getBoundingClientRect();
 
-        alert("Error connecting to server.");
+const x =
+e.clientX -
+rect.left -
+rect.width/2;
 
-    }
+const y =
+e.clientY -
+rect.top -
+rect.height/2;
+
+button.style.transform =
+`translate(${x*0.15}px,${y*0.15}px)`;
 
 });
 
-input.addEventListener("keydown", (e) => {
+button.addEventListener(
+"mouseleave",
+()=>{
 
-    if (e.key === "Enter") {
+button.style.transform =
+"translate(0,0)";
 
-        sendButton.click();
+});
 
-    }
+});
+
+/* =========================
+ADD USER MESSAGE
+========================= */
+
+function addUserMessage(text){
+
+const message =
+document.createElement("div");
+
+message.className =
+"user-message";
+
+message.textContent =
+text;
+
+chatContainer.appendChild(
+message
+);
+
+chatContainer.scrollTop =
+chatContainer.scrollHeight;
+
+}
+
+/* =========================
+ADD AI MESSAGE
+========================= */
+
+function addAIMessage(text){
+
+const message =
+document.createElement("div");
+
+message.className =
+"ai-message";
+
+message.textContent =
+text;
+
+chatContainer.appendChild(
+message
+);
+
+chatContainer.scrollTop =
+chatContainer.scrollHeight;
+
+}
+
+/* =========================
+TYPING INDICATOR
+========================= */
+
+function showTyping(){
+
+const typing =
+document.createElement("div");
+
+typing.className =
+"ai-message";
+
+typing.id =
+"typing";
+
+typing.innerHTML =
+"Thinking...";
+
+chatContainer.appendChild(
+typing
+);
+
+chatContainer.scrollTop =
+chatContainer.scrollHeight;
+
+}
+
+function removeTyping(){
+
+const typing =
+document.getElementById(
+"typing"
+);
+
+if(typing){
+
+typing.remove();
+
+}
+
+}
+
+/* =========================
+SEND MESSAGE
+========================= */
+
+async function sendMessage(){
+
+const message =
+input.value.trim();
+
+if(!message) return;
+
+addUserMessage(message);
+
+input.value = "";
+
+input.style.height =
+"auto";
+
+showTyping();
+
+try{
+
+const response =
+await fetch("/chat",{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+message:message
+
+})
+
+});
+
+const data =
+await response.json();
+
+removeTyping();
+
+addAIMessage(
+data.response ||
+"No response received."
+);
+
+}
+
+catch(error){
+
+console.error(error);
+
+removeTyping();
+
+addAIMessage(
+"Connection error. Please try again."
+);
+
+}
+
+}
+
+/* =========================
+SEND BUTTON
+========================= */
+
+sendButton.addEventListener(
+"click",
+sendMessage
+);
+
+/* =========================
+ENTER TO SEND
+========================= */
+
+input.addEventListener(
+"keydown",
+(e)=>{
+
+if(
+e.key==="Enter"
+&&
+!e.shiftKey
+){
+
+e.preventDefault();
+
+sendMessage();
+
+}
+
+}
+);
+
+/* =========================
+CARD INTERACTION
+========================= */
+
+document
+.querySelectorAll(
+".card,.tool"
+)
+.forEach(card=>{
+
+card.addEventListener(
+"mousemove",
+(e)=>{
+
+const rect =
+card.getBoundingClientRect();
+
+const x =
+e.clientX -
+rect.left -
+rect.width/2;
+
+const y =
+e.clientY -
+rect.top -
+rect.height/2;
+
+card.style.transform =
+`perspective(1000px)
+rotateY(${x/20}deg)
+rotateX(${-y/20}deg)
+translateY(-6px)`;
+
+});
+
+card.addEventListener(
+"mouseleave",
+()=>{
+
+card.style.transform =
+"perspective(1000px) rotateX(0) rotateY(0) translateY(0)";
+
+});
+
+});
+
+/* =========================
+SUGGESTION CLICK
+========================= */
+
+document
+.querySelectorAll(".card")
+.forEach(card=>{
+
+card.addEventListener(
+"click",
+()=>{
+
+input.value =
+card.textContent;
+
+autoResize();
+
+input.focus();
+
+});
 
 });
