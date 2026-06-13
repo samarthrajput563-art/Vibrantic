@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibrantic AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>Vibrantic AI</h2>
+            <p>Think. Create. Elevate.</p>
+        </div>
+
+        <button class="new-chat">
+            + New Chat
+        </button>
+
+        <nav>
+
+            <a href="#" class="active">Dashboard</a>
+
+            <a href="#">Workspace</a>
+
+            <a href="#">Agents</a>
+
+            <a href="#">Tools</a>
+
+            <a href="#">History</a>
+
+            <a href="#">Settings</a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="profile-card">
+                <div class="avatar">S</div>
+
+                <div>
+                    <h4>SAMARTH</h4>
+                    <p>Pro Plan</p>
+                </div>
+            </div>
+
+            <div class="dark-mode">
+                🌙 Dark Mode
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="content">
+
+       <div class="top-bar">
+        
+        <button class="pro-btn">
+                👑 Pro Plan
+           </button>
+
+       </div>
+
+        <section class="hero">
+
+            <p class="welcome">
+                WELCOME BACK, SAMAR ✧
+            </p>
+
+            <h1>
+                How can
+                <span>Vibrantic</span>
+                help you today?
+            </h1>
+
+            <p class="subtitle">
+                Research. Create. Analyze. Automate.
+            </p>
+
+            <div class="prompt-box">
+            <div id="chatContainer" class="chat-container"></div>  
+
+                <input
+                    id="userInput"
+                    type="text"
+                    placeholder="Ask anything..."
+                >
+
+                <button class="mic-btn">
+                    🎤
+                </button>
+
+                <button id="sendButton">
+                    ➜
+                </button>
+
+            </div>
+
+            <!-- PROMPTS -->
+
+            <h3 class="section-title">
+                ✧ Suggested Prompts
+            </h3>
+
+            <div class="suggestions">
+
+                <div class="card">Create a business plan</div>
+
+                <div class="card">Research AI market trends</div>
+
+                <div class="card">Build a website</div>
+
+                <div class="card">Analyze a PDF</div>
+
+                <div class="card">Write a blog post</div>
+
+                <div class="card">Generate Python code</div>
+
+            </div>
+
+            <!-- TOOLS -->
+
+            <h3 class="section-title">
+                ⚡ Popular Tools
+            </h3>
+
+            <div class="tools">
+
+                <div class="tool">
+                    <h4>✍ Writer</h4>
+                    <p>AI Writing Assistant</p>
+                </div>
+
+                <div class="tool">
+                    <h4>🔍 Researcher</h4>
+                    <p>Deep Research</p>
+                </div>
+
+                <div class="tool">
+                    <h4>💻 Code Assistant</h4>
+                    <p>Code Generation</p>
+                </div>
+
+                <div class="tool">
+                    <h4>📄 PDF Assistant</h4>
+                    <p>Analyze Documents</p>
+                </div>
+
+                <div class="tool">
+                    <h4>🖼 Image Generator</h4>
+                    <p>Create Images</p>
+                </div>
+
+                <div class="tool">
+                    <h4>📊 Data Analyzer</h4>
+                    <p>Extract Insights</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<div class="particles">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+
+</body>
+</html>
